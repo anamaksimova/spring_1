@@ -3,6 +3,7 @@ package ru.geekbrains.entity;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -54,5 +55,20 @@ public class Product {
                 ", name='" + productname + '\'' +
                 ", price=" + price +
                 '}';
+    }
+    @ManyToMany
+    @JoinTable(
+            name = "products_customers",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "customer_id")
+    )
+    private List<Customer> customers;
+
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
     }
 }
