@@ -5,10 +5,10 @@
 <hibernate-configuration>
     <session-factory>
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://localhost:3306/hibernate_lesson_1?createDatabaseIfNotExist=true&amp;allowPublicKeyRetrieval=true&amp;useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/hibernate_lesson?createDatabaseIfNotExist=true&amp;allowPublicKeyRetrieval=true&amp;useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC</property>
         <property name="connection.username">me</property>
         <property name="connection.password">521027521027521027</property>
-        <property name="connection.pool_size">100</property>
+        <property name="connection.pool_size">1</property>
         <property name="current_session_context_class">thread</property>
 
         <property name="hibernate.hbm2ddl.auto">update</property>
@@ -19,8 +19,5 @@
 
         <mapping class="ru.geekbrains.entity.Product"/>
         <mapping class="ru.geekbrains.entity.ProductRepository"/>
-        <mapping class="ru.geekbrains.entity.Customer"/>
-        <mapping class="ru.geekbrains.entity.Cart"/>
-        <mapping class="ru.geekbrains.entity.Products_Customers"/>
     </session-factory>
 </hibernate-configuration>
