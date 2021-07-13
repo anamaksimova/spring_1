@@ -34,39 +34,8 @@
 
 <div class="container">
     <div class="row py-2">
+      <h2 class="text-danger" th:text="${message}">Error message</h2>
 
-
-        <div class="col-12">
-            <table class="table table-bordered my-2">
-                <thead>
-                <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Product</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ><form th:action="@{/product}" method="post" th:object="${product}">
-                    <th scope="row" th:text="${product.id}">1</th>
-
-
-                    <td > <input type="text" class="form-control" id="name" th:field="*{name}">
-                        <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p> </td>
-                    <td > <input type="text" class="form-control" id="price" th:field="*{price}" >
-                        <p class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p></td>
-
-                    <td>
-                        <input type="hidden" id="id" th:field="*{id}">
-
-                        <button type="submit" class="btn btn-primary">Submit</button>
-
-                </form>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
 </div>
 

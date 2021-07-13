@@ -1,9 +1,16 @@
 package ru.geekbrains.persist;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+
 public class Product {
     private Long id;
+
+@NotBlank
     private  String name;
+@Min(0L)
     private Float price;
+
     public Product(){
 
     }
