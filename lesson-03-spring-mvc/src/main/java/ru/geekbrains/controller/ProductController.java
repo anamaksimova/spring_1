@@ -3,16 +3,14 @@ package ru.geekbrains.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import ru.geekbrains.persist.Product;
 import ru.geekbrains.persist.ProductRepository;
-
-import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/product")
@@ -45,33 +43,20 @@ public class ProductController {
     @GetMapping("/{id}")
     public String editProduct(@PathVariable("id") Long id, Model model) {
 
-        model.addAttribute("product", productRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User not found")));
+        model.addAttribute("product", productRepository.findById(id));
         return "product_edit";
     }
 
     @PostMapping
-    public String update(@Valid Product product, BindingResult result) {
+    public String update(Product product) {
         logger.info("Saving product");
-        if (result.hasErrors()&&product.getId()==null) {
-            return "product_form";
-        } else if (result.hasErrors()&&product.getId()!=null){
-            return "product_edit";
-        }
 
-            if (product.getId()==null){
+       if (product.getId()==null){
         productRepository.save(product);}
-       else{
-           productRepository.update(product);
+       else if(product.getId()!=null){
+           productRepository.update(productRepository.findById(product.getId()));
        }
         return "redirect:/product";
-    }
-    @ExceptionHandler
-    public ModelAndView notFoundExceptionHandler(NotFoundException ex) {
-        ModelAndView modelAndView = new ModelAndView("not_found");
-        modelAndView.addObject("message", ex.getMessage());
-        modelAndView.setStatus(HttpStatus.NOT_FOUND);
-        return modelAndView;
     }
 }
 

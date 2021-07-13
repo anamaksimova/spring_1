@@ -1,6 +1,5 @@
 package ru.geekbrains;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 
 @Component
-
 public class ProductRepository1 {
     private final Map<Long,Product> productMap = new ConcurrentHashMap<>();
 

@@ -47,21 +47,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ><form th:action="@{/product}" method="post" th:object="${product}">
+                <tr >
                     <th scope="row" th:text="${product.id}">1</th>
-
-
-                    <td > <input type="text" class="form-control" id="name" th:field="*{name}">
-                        <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p> </td>
-                    <td > <input type="text" class="form-control" id="price" th:field="*{price}" >
-                        <p class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p></td>
-
-                    <td>
+                   <th th:text="${product.name}">product</td>
+                    <td th:text="${product.price}">price</td>
+                    <td> <form th:action="@{/product}" method="post" th:object="${product}">
                         <input type="hidden" id="id" th:field="*{id}">
 
                         <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
 
-                </form>
                     </td>
                 </tr>
                 </tbody>
