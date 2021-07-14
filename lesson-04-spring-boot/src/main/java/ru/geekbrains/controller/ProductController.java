@@ -13,6 +13,8 @@ import ru.geekbrains.persist.Product;
 import ru.geekbrains.persist.ProductRepository;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/product")
@@ -27,10 +29,15 @@ public class ProductController {
     }
 
     @GetMapping
-    public String listPage(Model model) {
+    public String listPage(Model model,
+                           @RequestParam("nameFilter") Optional<String> nameFilter){
         logger.info("Product list page requested");
-
-        model.addAttribute("products", productRepository.findAll());
+        List<Product> products;
+        if(nameFilter.isPresent()){
+               products=productRepository.findByNameStartsWith(nameFilter.get());
+        } else {products=productRepository.findAll();
+              }
+        model.addAttribute("products", products);
         return "products";
     }
 
@@ -59,11 +66,20 @@ public class ProductController {
             return "product_edit";
         }
 
-            if (product.getId()==null){
-        productRepository.save(product);}
-       else{
-           productRepository.update(product);
-       }
+         //   if (product.getId()==null){
+        productRepository.save(product);
+            //}
+//       else{
+//           productRepository.update(product);
+//       }
+        return "redirect:/product";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteProduct(@PathVariable("id") Long id) {
+        logger.info("Deleting product with id {}", id);
+
+        productRepository.deleteById(id);
         return "redirect:/product";
     }
     @ExceptionHandler
