@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ru.geekbrains.persist.Product;
 import ru.geekbrains.persist.ProductRepository;
 import ru.geekbrains.persist.ProductSpecifications;
+import ru.geekbrains.service.ProductService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -24,35 +26,20 @@ import java.util.Optional;
 public class ProductController {
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
-    private final ProductRepository productRepository;
+    private final ProductService productService;
 
     @Autowired
-    public ProductController(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
     @GetMapping
     public String listPage(Model model,
-                           @RequestParam("nameFilter") Optional<String> nameFilter,
-                           @RequestParam("minPrice") Optional<Float> minPrice,
-                           @RequestParam("maxPrice") Optional<Float> maxPrice,
-                           @RequestParam("page") Optional<Integer> page,
-                           @RequestParam("size") Optional<Integer> size){
+                         ProductListParams productListParams){
         logger.info("Product list page requested");
 
 
-        Specification<Product> spec = Specification.where(null);
-        if (nameFilter.isPresent() && !nameFilter.get().isBlank()){
-            spec = spec.and(ProductSpecifications.namePrefix(nameFilter.get()));
-        }
-        if (minPrice.isPresent()){
-            spec = spec.and(ProductSpecifications.minPrice(minPrice.get()));
-        }
-        if (maxPrice.isPresent()){
-            spec = spec.and(ProductSpecifications.maxPrice(maxPrice.get()));
-        }
-        model.addAttribute("products", productRepository.findAll(spec,
-                PageRequest.of(page.orElse(1)-1, size.orElse(3) )));
+        model.addAttribute("products", productService.findWithFilter(productListParams));
         return "products";
     }
 
@@ -67,7 +54,7 @@ public class ProductController {
     @GetMapping("/{id}")
     public String editProduct(@PathVariable("id") Long id, Model model) {
 
-        model.addAttribute("product", productRepository.findById(id)
+        model.addAttribute("product", productService.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found")));
         return "product_edit";
     }
@@ -82,7 +69,7 @@ public class ProductController {
         }
 
          //   if (product.getId()==null){
-        productRepository.save(product);
+        productService.save(product);
             //}
 //       else{
 //           productRepository.update(product);
@@ -94,7 +81,7 @@ public class ProductController {
     public String deleteProduct(@PathVariable("id") Long id) {
         logger.info("Deleting product with id {}", id);
 
-        productRepository.deleteById(id);
+        productService.deleteById(id);
         return "redirect:/product";
     }
     @ExceptionHandler
