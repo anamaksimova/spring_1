@@ -2,6 +2,7 @@ package ru.geekbrains.controller;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 public class UserDto {
 
@@ -18,7 +19,7 @@ public class UserDto {
 
     @NotBlank
     private String repeatPassword;
-
+    private Set<RoleDto> roles;
 
 
     public UserDto() {
@@ -28,6 +29,12 @@ public class UserDto {
         this.id = id;
         this.username = username;
         this.age = age;
+    }
+    public UserDto(Long id, String username, Integer age, Set<RoleDto> roles) {
+        this.id = id;
+        this.username = username;
+        this.age = age;
+        this.roles = roles;
     }
 
 
@@ -71,5 +78,11 @@ public class UserDto {
         this.repeatPassword = repeatPassword;
     }
 
+    public Set<RoleDto> getRoles() {
+        return roles;
+    }
 
+    public void setRoles(Set<RoleDto> roles) {
+        this.roles = roles;
+    }
 }
