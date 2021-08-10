@@ -20,6 +20,9 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
     List<User> filterUsers(@Param("prefix") String prefix,
                            @Param("minAge") Integer minAge,
                            @Param("maxAge") Integer maxAge);
-
+    @Query("select distinct u " +
+            "from User u " +
+            "left join fetch u.roles " +
+            "where u.username = :username")
     Optional<User> findByUsername(String username);
 }
