@@ -3,6 +3,7 @@ package ru.geekbrains.persist;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -21,16 +22,20 @@ public class User {
     @Column
     private String password;
 
-
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
     public User() {
     }
 
-    public User(Long id, String username, String password, Integer age) {
+    public User(Long id, String username, String password, Integer age, Set<Role> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.age = age;
-
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -64,6 +69,12 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+    public Set<Role> getRoles() {
+        return roles;
+    }
 
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 
 }
